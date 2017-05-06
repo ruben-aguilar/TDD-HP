@@ -14,6 +14,7 @@ namespace Tennis
         private const string EMPTY_SCORE = "";
         private const string FORTY_SCORE = "Forty";
         private const string SCORE_SEPARATOR_TOKEN = "-";
+        private const int ADVANTAGE_POINTS = 4;
         private int p1point;
         private int p2point;
 
@@ -79,17 +80,17 @@ namespace Tennis
                 score = p1res + SCORE_SEPARATOR_TOKEN + p2res;
             }
 
-            if (p1point > p2point && p1point < 4)
+            if (p1point > p2point && p1point < ADVANTAGE_POINTS)
             {
-                if (p1point == 2)
+                if (p1point == THIRTY_POINTS)
                     p1res = THIRTY_SCORE;
-                if (p1point == 3)
-                    p1res = "Forty";
-                if (p2point == 1)
+                if (p1point == FORTY_POINTS)
+                    p1res = FORTY_SCORE;
+                if (p2point == FIFTEEN_POINTS)
                     p2res = FIFTEEN_SCORE;
-                if (p2point == 2)
+                if (p2point == THIRTY_POINTS)
                     p2res = THIRTY_SCORE;
-                score = p1res + "-" + p2res;
+                score = p1res + SCORE_SEPARATOR_TOKEN + p2res;
             }
             if (p2point > p1point && p2point < 4)
             {
