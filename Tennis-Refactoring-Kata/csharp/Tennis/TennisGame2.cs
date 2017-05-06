@@ -15,6 +15,8 @@ namespace Tennis
         private const string FORTY_SCORE = "Forty";
         private const string SCORE_SEPARATOR_TOKEN = "-";
         private const int ADVANTAGE_POINTS = 4;
+        private const string PLAYER1_ADVANTAGE_SCORE = "Advantage player1";
+        private const string PLAYER2_ADVANTAGE_SCORE = "Advantage player2";
         private int player1Points;
         private int player2Points;
 
@@ -81,8 +83,8 @@ namespace Tennis
             }
 
             bool isPlayer1Winning = player1Points > player2Points;
-            bool player1HasAdvantage = player1Points < ADVANTAGE_POINTS;
-            if (isPlayer1Winning && player1HasAdvantage)
+            bool player1DoesNotHaveAdvantage = player1Points < ADVANTAGE_POINTS;
+            if (isPlayer1Winning && player1DoesNotHaveAdvantage)
             {
                 if (player1Points == THIRTY_POINTS)
                     player1Result = THIRTY_SCORE;
@@ -96,8 +98,8 @@ namespace Tennis
             }
 
             bool isPlayer2Winning = player2Points > player1Points;
-            bool player2HasAdvantage = player2Points < ADVANTAGE_POINTS;
-            if (isPlayer2Winning && player2HasAdvantage)
+            bool player2DoesNotHaveAdvantage = player2Points < ADVANTAGE_POINTS;
+            if (isPlayer2Winning && player2DoesNotHaveAdvantage)
             {
                 if (player2Points == THIRTY_POINTS)
                     player2Result = THIRTY_SCORE;
@@ -110,14 +112,16 @@ namespace Tennis
                 score = player1Result + SCORE_SEPARATOR_TOKEN + player2Result;
             }
 
-            if (player1Points > player2Points && player2Points >= 3)
+            bool player1HasAdvantage = isPlayer1Winning && player2Points >= FORTY_POINTS;
+            if (player1HasAdvantage)
             {
-                score = "Advantage player1";
+                score = PLAYER1_ADVANTAGE_SCORE;
             }
 
-            if (player2Points > player1Points && player1Points >= 3)
+            bool player2HasAdvantage = isPlayer2Winning && player1Points >= FORTY_POINTS;
+            if (player2HasAdvantage)
             {
-                score = "Advantage player2";
+                score = PLAYER2_ADVANTAGE_SCORE;
             }
 
             if (player1Points >= 4 && player2Points >= 0 && (player1Points - player2Points) >= 2)
