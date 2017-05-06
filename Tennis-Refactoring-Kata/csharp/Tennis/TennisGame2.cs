@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Tennis
 {
     public class TennisGame2 : ITennisGame
@@ -24,6 +26,14 @@ namespace Tennis
         private const int ADVANTAGE_THRESHOLD_POINTS = 4;
         private const int WIN_THRESHOLD_IN_DEUCE = 2;
 
+        private Dictionary<int, string> pointsToScore = new Dictionary<int, string>
+        {
+            {ZERO_POINTS, LOVE_SCORE},
+            {FIFTEEN_POINTS, FIFTEEN_SCORE},
+            {THIRTY_POINTS, THIRTY_SCORE},
+            {FORTY_POINTS, FORTY_SCORE}
+        };
+
 
         private int player1Points;
         private int player2Points;
@@ -43,12 +53,7 @@ namespace Tennis
 
             if (tiedBelowFourtyPoints)
             {
-                if (player1Points == ZERO_POINTS)
-                    score = LOVE_SCORE;
-                if (player1Points == FIFTEEN_POINTS)
-                    score = FIFTEEN_SCORE;
-                if (player1Points == THIRTY_POINTS)
-                    score = THIRTY_SCORE;
+                score = TranslatePlayerScoreToNaturalLanguage(player1Points);
                 score += DRAW_SCORE_POSTFIX;
             }
 
@@ -60,12 +65,7 @@ namespace Tennis
             bool player2HasNoPoints = player2Points == ZERO_POINTS;
             if (player1HasPoints && player2HasNoPoints)
             {
-                if (player1Points == FIFTEEN_POINTS)
-                    player1Result = FIFTEEN_SCORE;
-                if (player1Points == THIRTY_POINTS)
-                    player1Result = THIRTY_SCORE;
-                if (player1Points == FORTY_POINTS)
-                    player1Result = FORTY_SCORE;
+                player1Result = TranslatePlayerScoreToNaturalLanguage(player1Points);
 
                 player2Result = LOVE_SCORE;
                 score = player1Result + SCORE_SEPARATOR_TOKEN + player2Result;
@@ -75,12 +75,7 @@ namespace Tennis
             bool player1HasNoPoints = player1Points == 0;
             if (player2HasPoints && player1HasNoPoints)
             {
-                if (player2Points == FIFTEEN_POINTS)
-                    player2Result = FIFTEEN_SCORE;
-                if (player2Points == THIRTY_POINTS)
-                    player2Result = THIRTY_SCORE;
-                if (player2Points == FORTY_POINTS)
-                    player2Result = FORTY_SCORE;
+                player2Result = TranslatePlayerScoreToNaturalLanguage(player2Points);
 
                 player1Result = LOVE_SCORE;
                 score = player1Result + SCORE_SEPARATOR_TOKEN + player2Result;
@@ -90,14 +85,9 @@ namespace Tennis
             bool player1DoesNotHaveAdvantage = player1Points < ADVANTAGE_THRESHOLD_POINTS;
             if (isPlayer1Winning && player1DoesNotHaveAdvantage)
             {
-                if (player1Points == THIRTY_POINTS)
-                    player1Result = THIRTY_SCORE;
-                if (player1Points == FORTY_POINTS)
-                    player1Result = FORTY_SCORE;
-                if (player2Points == FIFTEEN_POINTS)
-                    player2Result = FIFTEEN_SCORE;
-                if (player2Points == THIRTY_POINTS)
-                    player2Result = THIRTY_SCORE;
+                player1Result = TranslatePlayerScoreToNaturalLanguage(player1Points);
+                player2Result = TranslatePlayerScoreToNaturalLanguage(player2Points);
+
                 score = player1Result + SCORE_SEPARATOR_TOKEN + player2Result;
             }
 
@@ -105,14 +95,9 @@ namespace Tennis
             bool player2DoesNotHaveAdvantage = player2Points < ADVANTAGE_THRESHOLD_POINTS;
             if (isPlayer2Winning && player2DoesNotHaveAdvantage)
             {
-                if (player2Points == THIRTY_POINTS)
-                    player2Result = THIRTY_SCORE;
-                if (player2Points == FORTY_POINTS)
-                    player2Result = FORTY_SCORE;
-                if (player1Points == FIFTEEN_POINTS)
-                    player1Result = FIFTEEN_SCORE;
-                if (player1Points == THIRTY_POINTS)
-                    player1Result = THIRTY_SCORE;
+                player1Result = TranslatePlayerScoreToNaturalLanguage(player1Points);
+                player2Result = TranslatePlayerScoreToNaturalLanguage(player2Points);
+
                 score = player1Result + SCORE_SEPARATOR_TOKEN + player2Result;
             }
 
@@ -137,6 +122,13 @@ namespace Tennis
                 score = PLAYER2_WINS_SCORE;
             }
             return score;
+        }
+
+        private string TranslatePlayerScoreToNaturalLanguage(int points)
+        {
+            if (points >= FORTY_POINTS) return pointsToScore[FORTY_POINTS];
+
+            return pointsToScore[points];
         }
 
         private bool ArePlayersTied()
