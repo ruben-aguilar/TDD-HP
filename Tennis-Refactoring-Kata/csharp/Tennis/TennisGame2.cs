@@ -2,43 +2,44 @@ namespace Tennis
 {
     public class TennisGame2 : ITennisGame
     {
+        private const string EMPTY_SCORE = "";
         private const string LOVE_SCORE = "Love";
         private const string FIFTEEN_SCORE = "Fifteen";
         private const string THIRTY_SCORE = "Thirty";
-        private const string DRAW_SCORE_POSTFIX = "-All";
-        private const string DEUCE_SCORE = "Deuce";
-        private const int ZERO_POINTS = 0;
-        private const int FIFTEEN_POINTS = 1;
-        private const int THIRTY_POINTS = 2;
-        private const int FORTY_POINTS = 3;
-        private const string EMPTY_SCORE = "";
         private const string FORTY_SCORE = "Forty";
-        private const string SCORE_SEPARATOR_TOKEN = "-";
-        private const int ADVANTAGE_THRESHOLD_POINTS = 4;
+        private const string DEUCE_SCORE = "Deuce";
         private const string PLAYER1_ADVANTAGE_SCORE = "Advantage player1";
         private const string PLAYER2_ADVANTAGE_SCORE = "Advantage player2";
         private const string PLAYER1_WINS_SCORE = "Win for player1";
         private const string PLAYER2_WINS_SCORE = "Win for player2";
+        private const string DRAW_SCORE_POSTFIX = "-All";
+
+        private const string SCORE_SEPARATOR_TOKEN = "-";
+
+        private const int ZERO_POINTS = 0;
+        private const int FIFTEEN_POINTS = 1;
+        private const int THIRTY_POINTS = 2;
+        private const int FORTY_POINTS = 3;
+
+        private const int ADVANTAGE_THRESHOLD_POINTS = 4;
         private const int WIN_THRESHOLD_IN_DEUCE = 2;
+
+
         private int player1Points;
         private int player2Points;
 
         private string player1Result = "";
         private string player2Result = "";
-        private string player1Name;
-        private string player2Name;
 
         public TennisGame2(string player1Name, string player2Name)
         {
-            this.player1Name = player1Name;
             player1Points = 0;
-            this.player2Name = player2Name;
         }
 
         public string GetScore()
         {
             var score = EMPTY_SCORE;
-            bool tiedBelowFourtyPoints = (player1Points == player2Points) && (player1Points < FORTY_POINTS);
+            bool tiedBelowFourtyPoints = ArePlayersTied() && (player1Points < FORTY_POINTS);
 
             if (tiedBelowFourtyPoints)
             {
@@ -51,7 +52,7 @@ namespace Tennis
                 score += DRAW_SCORE_POSTFIX;
             }
 
-            bool tiedAboveThirtyPoints = (player1Points == player2Points) && (player1Points > THIRTY_POINTS);
+            bool tiedAboveThirtyPoints = ArePlayersTied() && (player1Points > THIRTY_POINTS);
             if (tiedAboveThirtyPoints)
                 score = DEUCE_SCORE;
 
@@ -136,6 +137,11 @@ namespace Tennis
                 score = PLAYER2_WINS_SCORE;
             }
             return score;
+        }
+
+        private bool ArePlayersTied()
+        {
+            return (player1Points == player2Points);
         }
 
         public void SetP1Score(int number)
