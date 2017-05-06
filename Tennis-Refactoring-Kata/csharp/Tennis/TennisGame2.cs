@@ -14,9 +14,12 @@ namespace Tennis
         private const string EMPTY_SCORE = "";
         private const string FORTY_SCORE = "Forty";
         private const string SCORE_SEPARATOR_TOKEN = "-";
-        private const int ADVANTAGE_POINTS = 4;
+        private const int ADVANTAGE_THRESHOLD_POINTS = 4;
         private const string PLAYER1_ADVANTAGE_SCORE = "Advantage player1";
         private const string PLAYER2_ADVANTAGE_SCORE = "Advantage player2";
+        private const string PLAYER1_WINS_SCORE = "Win for player1";
+        private const string PLAYER2_WINS_SCORE = "Win for player2";
+        private const int WIN_THRESHOLD_IN_DEUCE = 2;
         private int player1Points;
         private int player2Points;
 
@@ -83,7 +86,7 @@ namespace Tennis
             }
 
             bool isPlayer1Winning = player1Points > player2Points;
-            bool player1DoesNotHaveAdvantage = player1Points < ADVANTAGE_POINTS;
+            bool player1DoesNotHaveAdvantage = player1Points < ADVANTAGE_THRESHOLD_POINTS;
             if (isPlayer1Winning && player1DoesNotHaveAdvantage)
             {
                 if (player1Points == THIRTY_POINTS)
@@ -98,7 +101,7 @@ namespace Tennis
             }
 
             bool isPlayer2Winning = player2Points > player1Points;
-            bool player2DoesNotHaveAdvantage = player2Points < ADVANTAGE_POINTS;
+            bool player2DoesNotHaveAdvantage = player2Points < ADVANTAGE_THRESHOLD_POINTS;
             if (isPlayer2Winning && player2DoesNotHaveAdvantage)
             {
                 if (player2Points == THIRTY_POINTS)
@@ -124,13 +127,13 @@ namespace Tennis
                 score = PLAYER2_ADVANTAGE_SCORE;
             }
 
-            if (player1Points >= 4 && player2Points >= 0 && (player1Points - player2Points) >= 2)
+            if (player1Points >= ADVANTAGE_THRESHOLD_POINTS && player2Points >= ZERO_POINTS && (player1Points - player2Points) >= WIN_THRESHOLD_IN_DEUCE)
             {
-                score = "Win for player1";
+                score = PLAYER1_WINS_SCORE;
             }
-            if (player2Points >= 4 && player1Points >= 0 && (player2Points - player1Points) >= 2)
+            if (player2Points >= ADVANTAGE_THRESHOLD_POINTS && player1Points >= ZERO_POINTS && (player2Points - player1Points) >= WIN_THRESHOLD_IN_DEUCE)
             {
-                score = "Win for player2";
+                score = PLAYER2_WINS_SCORE;
             }
             return score;
         }
