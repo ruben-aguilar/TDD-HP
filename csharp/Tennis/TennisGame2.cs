@@ -64,17 +64,19 @@ namespace Tennis
                 score = p1res + SCORE_SEPARATOR_TOKEN + p2res;
             }
 
-            if (p2point > 0 && p1point == 0)
+            bool player2HasPoints = p2point > 0;
+            bool player1HasNoPoints = p1point == 0;
+            if (player2HasPoints && player1HasNoPoints)
             {
-                if (p2point == 1)
+                if (p2point == FIFTEEN_POINTS)
                     p2res = FIFTEEN_SCORE;
-                if (p2point == 2)
+                if (p2point == THIRTY_POINTS)
                     p2res = THIRTY_SCORE;
-                if (p2point == 3)
-                    p2res = "Forty";
+                if (p2point == FORTY_POINTS)
+                    p2res = FORTY_SCORE;
 
                 p1res = LOVE_SCORE;
-                score = p1res + "-" + p2res;
+                score = p1res + SCORE_SEPARATOR_TOKEN + p2res;
             }
 
             if (p1point > p2point && p1point < 4)
