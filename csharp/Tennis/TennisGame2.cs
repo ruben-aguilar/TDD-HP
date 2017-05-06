@@ -10,8 +10,10 @@ namespace Tennis
         private const int ZERO_POINTS = 0;
         private const int FIFTEEN_POINTS = 1;
         private const int THIRTY_POINTS = 2;
-        private const int FOURTY_SCORE = 3;
+        private const int FORTY_POINTS = 3;
         private const string EMPTY_SCORE = "";
+        private const string FORTY_SCORE = "Forty";
+        private const string SCORE_SEPARATOR_TOKEN = "-";
         private int p1point;
         private int p2point;
 
@@ -30,7 +32,7 @@ namespace Tennis
         public string GetScore()
         {
             var score = EMPTY_SCORE;
-            bool tiedBelowFourtyPoints = (p1point == p2point) && (p1point < FOURTY_SCORE);
+            bool tiedBelowFourtyPoints = (p1point == p2point) && (p1point < FORTY_POINTS);
 
             if (tiedBelowFourtyPoints)
             {
@@ -47,18 +49,21 @@ namespace Tennis
             if (tiedAboveThirtyPoints)
                 score = DEUCE_SCORE;
 
-            if (p1point > 0 && p2point == 0)
+            bool player1HasPoints = p1point > ZERO_POINTS;
+            bool player2HasNoPoints = p2point == ZERO_POINTS;
+            if (player1HasPoints && player2HasNoPoints)
             {
-                if (p1point == 1)
+                if (p1point == FIFTEEN_POINTS)
                     p1res = FIFTEEN_SCORE;
-                if (p1point == 2)
+                if (p1point == THIRTY_POINTS)
                     p1res = THIRTY_SCORE;
-                if (p1point == 3)
-                    p1res = "Forty";
+                if (p1point == FORTY_POINTS)
+                    p1res = FORTY_SCORE;
 
                 p2res = LOVE_SCORE;
-                score = p1res + "-" + p2res;
+                score = p1res + SCORE_SEPARATOR_TOKEN + p2res;
             }
+
             if (p2point > 0 && p1point == 0)
             {
                 if (p2point == 1)
