@@ -2,6 +2,16 @@ namespace Tennis
 {
     public class TennisGame2 : ITennisGame
     {
+        private const string LOVE_SCORE = "Love";
+        private const string FIFTEEN_SCORE = "Fifteen";
+        private const string THIRTY_SCORE = "Thirty";
+        private const string DRAW_SCORE_POSTFIX = "-All";
+        private const string DEUCE_SCORE = "Deuce";
+        private const int ZERO_POINTS = 0;
+        private const int FIFTEEN_POINTS = 1;
+        private const int THIRTY_POINTS = 2;
+        private const int FOURTY_SCORE = 3;
+        private const string EMPTY_SCORE = "";
         private int p1point;
         private int p2point;
 
@@ -19,67 +29,71 @@ namespace Tennis
 
         public string GetScore()
         {
-            var score = "";
-            if (p1point == p2point && p1point < 3)
+            var score = EMPTY_SCORE;
+            bool tiedBelowFourtyPoints = (p1point == p2point) && (p1point < FOURTY_SCORE);
+
+            if (tiedBelowFourtyPoints)
             {
-                if (p1point == 0)
-                    score = "Love";
-                if (p1point == 1)
-                    score = "Fifteen";
-                if (p1point == 2)
-                    score = "Thirty";
-                score += "-All";
+                if (p1point == ZERO_POINTS)
+                    score = LOVE_SCORE;
+                if (p1point == FIFTEEN_POINTS)
+                    score = FIFTEEN_SCORE;
+                if (p1point == THIRTY_POINTS)
+                    score = THIRTY_SCORE;
+                score += DRAW_SCORE_POSTFIX;
             }
-            if (p1point == p2point && p1point > 2)
-                score = "Deuce";
+
+            bool tiedAboveThirtyPoints = (p1point == p2point) && (p1point > THIRTY_POINTS);
+            if (tiedAboveThirtyPoints)
+                score = DEUCE_SCORE;
 
             if (p1point > 0 && p2point == 0)
             {
                 if (p1point == 1)
-                    p1res = "Fifteen";
+                    p1res = FIFTEEN_SCORE;
                 if (p1point == 2)
-                    p1res = "Thirty";
+                    p1res = THIRTY_SCORE;
                 if (p1point == 3)
                     p1res = "Forty";
 
-                p2res = "Love";
+                p2res = LOVE_SCORE;
                 score = p1res + "-" + p2res;
             }
             if (p2point > 0 && p1point == 0)
             {
                 if (p2point == 1)
-                    p2res = "Fifteen";
+                    p2res = FIFTEEN_SCORE;
                 if (p2point == 2)
-                    p2res = "Thirty";
+                    p2res = THIRTY_SCORE;
                 if (p2point == 3)
                     p2res = "Forty";
 
-                p1res = "Love";
+                p1res = LOVE_SCORE;
                 score = p1res + "-" + p2res;
             }
 
             if (p1point > p2point && p1point < 4)
             {
                 if (p1point == 2)
-                    p1res = "Thirty";
+                    p1res = THIRTY_SCORE;
                 if (p1point == 3)
                     p1res = "Forty";
                 if (p2point == 1)
-                    p2res = "Fifteen";
+                    p2res = FIFTEEN_SCORE;
                 if (p2point == 2)
-                    p2res = "Thirty";
+                    p2res = THIRTY_SCORE;
                 score = p1res + "-" + p2res;
             }
             if (p2point > p1point && p2point < 4)
             {
                 if (p2point == 2)
-                    p2res = "Thirty";
+                    p2res = THIRTY_SCORE;
                 if (p2point == 3)
                     p2res = "Forty";
                 if (p1point == 1)
-                    p1res = "Fifteen";
+                    p1res = FIFTEEN_SCORE;
                 if (p1point == 2)
-                    p1res = "Thirty";
+                    p1res = THIRTY_SCORE;
                 score = p1res + "-" + p2res;
             }
 
