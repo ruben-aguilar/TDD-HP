@@ -48,80 +48,123 @@ namespace Tennis
 
         public string GetScore()
         {
-            var score = EMPTY_SCORE;
-            bool tiedBelowFourtyPoints = ArePlayersTied() && (player1Points < FORTY_POINTS);
+            var matchScore = EMPTY_SCORE;
 
-            if (tiedBelowFourtyPoints)
+            matchScore = ProcessTiedScore();
+
+            matchScore = ProcessLoveScore(matchScore);
+
+            matchScore = ProcessOnePlayerIsWinning(matchScore);
+
+            matchScore = ProcessScoresWithAdvantage(matchScore);
+
+            matchScore = ProcessWinScore(matchScore);
+
+            return matchScore;
+        }
+
+        private string ProcessOnePlayerIsWinning(string matchScore)
+        {
+            bool player1DoesNotHaveAdvantage = player1Points < ADVANTAGE_THRESHOLD_POINTS;
+            if (IsPlayer1Winning() && player1DoesNotHaveAdvantage)
             {
-                score = TranslatePlayerScoreToNaturalLanguage(player1Points);
-                score += DRAW_SCORE_POSTFIX;
+                player1Result = TranslatePlayerScoreToNaturalLanguage(player1Points);
+                player2Result = TranslatePlayerScoreToNaturalLanguage(player2Points);
+
+                matchScore = player1Result + SCORE_SEPARATOR_TOKEN + player2Result;
             }
 
-            bool tiedAboveThirtyPoints = ArePlayersTied() && (player1Points > THIRTY_POINTS);
-            if (tiedAboveThirtyPoints)
-                score = DEUCE_SCORE;
+            bool player2DoesNotHaveAdvantage = player2Points < ADVANTAGE_THRESHOLD_POINTS;
+            if (IsPlayer2Winning() && player2DoesNotHaveAdvantage)
+            {
+                player1Result = TranslatePlayerScoreToNaturalLanguage(player1Points);
+                player2Result = TranslatePlayerScoreToNaturalLanguage(player2Points);
 
+                matchScore = player1Result + SCORE_SEPARATOR_TOKEN + player2Result;
+            }
+
+            return matchScore;
+        }
+
+        private string ProcessWinScore(string matchScore)
+        {
+            if (player1Points >= ADVANTAGE_THRESHOLD_POINTS && player2Points >= ZERO_POINTS && (player1Points - player2Points) >= WIN_THRESHOLD_IN_DEUCE)
+            {
+                matchScore = PLAYER1_WINS_SCORE;
+            }
+            if (player2Points >= ADVANTAGE_THRESHOLD_POINTS && player1Points >= ZERO_POINTS && (player2Points - player1Points) >= WIN_THRESHOLD_IN_DEUCE)
+            {
+                matchScore = PLAYER2_WINS_SCORE;
+            }
+
+            return matchScore;
+        }
+
+        private string ProcessScoresWithAdvantage(string matchScore)
+        {
+            bool player1HasAdvantage = IsPlayer1Winning() && (player2Points >= FORTY_POINTS);
+            if (player1HasAdvantage)
+            {
+                matchScore = PLAYER1_ADVANTAGE_SCORE;
+            }
+
+            bool player2HasAdvantage = IsPlayer2Winning() && (player1Points >= FORTY_POINTS);
+            if (player2HasAdvantage)
+            {
+                matchScore = PLAYER2_ADVANTAGE_SCORE;
+            }
+
+            return matchScore;
+        }
+
+        private bool IsPlayer1Winning()
+        {
+            return player1Points > player2Points;
+        }
+
+        private bool IsPlayer2Winning()
+        {
+            return player2Points > player1Points;
+        }
+
+        private string ProcessLoveScore(string matchScore)
+        {
             bool player1HasPoints = player1Points > ZERO_POINTS;
             bool player2HasNoPoints = player2Points == ZERO_POINTS;
-            if (player1HasPoints && player2HasNoPoints)
+
+            bool player2HasPoints = player2Points > ZERO_POINTS;
+            bool player1HasNoPoints = player1Points == ZERO_POINTS;
+
+            bool onlyOnePlayerHasLoveScore = (player1HasPoints && player2HasNoPoints) ||
+                                                    (player2HasPoints && player1HasNoPoints);
+            if (onlyOnePlayerHasLoveScore)
             {
                 player1Result = TranslatePlayerScoreToNaturalLanguage(player1Points);
 
                 player2Result = LOVE_SCORE;
-                score = player1Result + SCORE_SEPARATOR_TOKEN + player2Result;
+                matchScore = player1Result + SCORE_SEPARATOR_TOKEN + player2Result;
             }
 
-            bool player2HasPoints = player2Points > 0;
-            bool player1HasNoPoints = player1Points == 0;
-            if (player2HasPoints && player1HasNoPoints)
+            return matchScore;
+        }
+
+        private string ProcessTiedScore()
+        {
+            string matchScore = EMPTY_SCORE;
+
+            bool tiedBelowFourtyPoints = ArePlayersTied() && (player1Points < FORTY_POINTS);
+
+            if (tiedBelowFourtyPoints)
             {
-                player2Result = TranslatePlayerScoreToNaturalLanguage(player2Points);
-
-                player1Result = LOVE_SCORE;
-                score = player1Result + SCORE_SEPARATOR_TOKEN + player2Result;
+                matchScore = TranslatePlayerScoreToNaturalLanguage(player1Points);
+                matchScore += DRAW_SCORE_POSTFIX;
             }
 
-            bool isPlayer1Winning = player1Points > player2Points;
-            bool player1DoesNotHaveAdvantage = player1Points < ADVANTAGE_THRESHOLD_POINTS;
-            if (isPlayer1Winning && player1DoesNotHaveAdvantage)
-            {
-                player1Result = TranslatePlayerScoreToNaturalLanguage(player1Points);
-                player2Result = TranslatePlayerScoreToNaturalLanguage(player2Points);
+            bool tiedAboveThirtyPoints = ArePlayersTied() && (player1Points > THIRTY_POINTS);
+            if (tiedAboveThirtyPoints)
+                matchScore = DEUCE_SCORE;
 
-                score = player1Result + SCORE_SEPARATOR_TOKEN + player2Result;
-            }
-
-            bool isPlayer2Winning = player2Points > player1Points;
-            bool player2DoesNotHaveAdvantage = player2Points < ADVANTAGE_THRESHOLD_POINTS;
-            if (isPlayer2Winning && player2DoesNotHaveAdvantage)
-            {
-                player1Result = TranslatePlayerScoreToNaturalLanguage(player1Points);
-                player2Result = TranslatePlayerScoreToNaturalLanguage(player2Points);
-
-                score = player1Result + SCORE_SEPARATOR_TOKEN + player2Result;
-            }
-
-            bool player1HasAdvantage = isPlayer1Winning && (player2Points >= FORTY_POINTS);
-            if (player1HasAdvantage)
-            {
-                score = PLAYER1_ADVANTAGE_SCORE;
-            }
-
-            bool player2HasAdvantage = isPlayer2Winning && (player1Points >= FORTY_POINTS);
-            if (player2HasAdvantage)
-            {
-                score = PLAYER2_ADVANTAGE_SCORE;
-            }
-
-            if (player1Points >= ADVANTAGE_THRESHOLD_POINTS && player2Points >= ZERO_POINTS && (player1Points - player2Points) >= WIN_THRESHOLD_IN_DEUCE)
-            {
-                score = PLAYER1_WINS_SCORE;
-            }
-            if (player2Points >= ADVANTAGE_THRESHOLD_POINTS && player1Points >= ZERO_POINTS && (player2Points - player1Points) >= WIN_THRESHOLD_IN_DEUCE)
-            {
-                score = PLAYER2_WINS_SCORE;
-            }
-            return score;
+            return matchScore;
         }
 
         private string TranslatePlayerScoreToNaturalLanguage(int points)
