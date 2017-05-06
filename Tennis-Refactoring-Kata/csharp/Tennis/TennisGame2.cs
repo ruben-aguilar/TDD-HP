@@ -150,19 +150,23 @@ namespace Tennis
 
         private string ProcessTiedScore()
         {
-            string matchScore = EMPTY_SCORE;
+            bool isDeuce = ArePlayersTied() && (player1Points >= FORTY_POINTS);
 
-            bool tiedBelowFourtyPoints = ArePlayersTied() && (player1Points < FORTY_POINTS);
+            return TranslateTiedScoreToNaturalLanguage(isDeuce);
+        }
 
-            if (tiedBelowFourtyPoints)
+        private string TranslateTiedScoreToNaturalLanguage(bool isDeuce)
+        {
+            string matchScore;
+            if (isDeuce)
+            {
+                matchScore = DEUCE_SCORE;
+            }
+            else
             {
                 matchScore = TranslatePlayerScoreToNaturalLanguage(player1Points);
                 matchScore += DRAW_SCORE_POSTFIX;
             }
-
-            bool tiedAboveThirtyPoints = ArePlayersTied() && (player1Points > THIRTY_POINTS);
-            if (tiedAboveThirtyPoints)
-                matchScore = DEUCE_SCORE;
 
             return matchScore;
         }
