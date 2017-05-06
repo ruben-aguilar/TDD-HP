@@ -4,9 +4,10 @@
 /cpp/run.tests
 /ocaml/_build
 /ocaml/*.native
-csharp/packages/
-csharp/Tennis/bin/
-csharp/Tennis/obj/
+**/packages/
+**/bin/**
+**/obj/**
+*.user
 csharp/*.suo
 *.swp
 .DS_Store
