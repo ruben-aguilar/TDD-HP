@@ -80,7 +80,9 @@ namespace Tennis
                 score = p1res + SCORE_SEPARATOR_TOKEN + p2res;
             }
 
-            if (p1point > p2point && p1point < ADVANTAGE_POINTS)
+            bool isPlayer1Winning = p1point > p2point;
+            bool player1HasAdvantage = p1point < ADVANTAGE_POINTS;
+            if (isPlayer1Winning && player1HasAdvantage)
             {
                 if (p1point == THIRTY_POINTS)
                     p1res = THIRTY_SCORE;
@@ -92,6 +94,7 @@ namespace Tennis
                     p2res = THIRTY_SCORE;
                 score = p1res + SCORE_SEPARATOR_TOKEN + p2res;
             }
+
             if (p2point > p1point && p2point < 4)
             {
                 if (p2point == 2)
