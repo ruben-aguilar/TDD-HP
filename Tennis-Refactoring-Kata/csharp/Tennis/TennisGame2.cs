@@ -112,13 +112,13 @@ namespace Tennis
                 score = player1Result + SCORE_SEPARATOR_TOKEN + player2Result;
             }
 
-            bool player1HasAdvantage = isPlayer1Winning && player2Points >= FORTY_POINTS;
+            bool player1HasAdvantage = isPlayer1Winning && (player2Points >= FORTY_POINTS);
             if (player1HasAdvantage)
             {
                 score = PLAYER1_ADVANTAGE_SCORE;
             }
 
-            bool player2HasAdvantage = isPlayer2Winning && player1Points >= FORTY_POINTS;
+            bool player2HasAdvantage = isPlayer2Winning && (player1Points >= FORTY_POINTS);
             if (player2HasAdvantage)
             {
                 score = PLAYER2_ADVANTAGE_SCORE;
