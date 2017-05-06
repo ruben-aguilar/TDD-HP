@@ -95,17 +95,19 @@ namespace Tennis
                 score = player1Result + SCORE_SEPARATOR_TOKEN + player2Result;
             }
 
-            if (player2Points > player1Points && player2Points < 4)
+            bool isPlayer2Winning = player2Points > player1Points;
+            bool player2HasAdvantage = player2Points < ADVANTAGE_POINTS;
+            if (isPlayer2Winning && player2HasAdvantage)
             {
-                if (player2Points == 2)
+                if (player2Points == THIRTY_POINTS)
                     player2Result = THIRTY_SCORE;
-                if (player2Points == 3)
-                    player2Result = "Forty";
-                if (player1Points == 1)
+                if (player2Points == FORTY_POINTS)
+                    player2Result = FORTY_SCORE;
+                if (player1Points == FIFTEEN_POINTS)
                     player1Result = FIFTEEN_SCORE;
-                if (player1Points == 2)
+                if (player1Points == THIRTY_POINTS)
                     player1Result = THIRTY_SCORE;
-                score = player1Result + "-" + player2Result;
+                score = player1Result + SCORE_SEPARATOR_TOKEN + player2Result;
             }
 
             if (player1Points > player2Points && player2Points >= 3)
