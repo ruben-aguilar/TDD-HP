@@ -4,8 +4,8 @@
 /cpp/run.tests
 /ocaml/_build
 /ocaml/*.native
-/Tennis-Refactoring-Kata/csharp/Tennis/bin/*
-/Tennis-Refactoring-Kata/csharp/Tennis/obj/*
+RubenAguilarBecerra/Tennis-Refactoring-Kata/csharp/Tennis/bin/*
+RubenAguilarBecerra/Tennis-Refactoring-Kata/csharp/Tennis/obj/*
 *.user
 csharp/*.suo
 *.swp
